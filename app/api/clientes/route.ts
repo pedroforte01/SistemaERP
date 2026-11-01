@@ -1,13 +1,18 @@
 import pool from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
-  const { nome, documento, email, telefone } = await request.json();
+export async function GET() {
+  const result = await pool.query("SELECT * FROM clientes ORDER BY nome");
+  return NextResponse.json(result.rows);
+}
 
-  await pool.query(
-    "INSERT INTO clientes (nome, documento, email, telefone) VALUES ($1, $2, $3, $4)",
-    [nome, documento, email, telefone]
+export async function POST(request: Request) {
+  const { nome, documento, email, telefone, status } = await request.json();
+
+  const result = await pool.query(
+    "INSERT INTO clientes (nome, documento, email, telefone, status) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+    [nome, documento, email, telefone, status ?? "ativo"]
   );
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json(result.rows[0]);
 }
