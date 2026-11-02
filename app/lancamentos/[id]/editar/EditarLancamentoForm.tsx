@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Lancamento } from "../../data";
+import { formatarData } from "@/lib/periodo";
 
 type Aluno = {
   id: number;
@@ -34,6 +35,9 @@ export default function EditarLancamentoForm({
   const [valor, setValor] = useState(String(lancamento.valor));
   const [vencimento, setVencimento] = useState(lancamento.vencimento ?? "");
   const [status, setStatus] = useState(lancamento.status ?? "pendente");
+  const [pagoEm, setPagoEm] = useState(
+    lancamento.pago_em ?? formatarData(new Date())
+  );
   const [erro, setErro] = useState("");
   const [salvando, setSalvando] = useState(false);
 
@@ -92,8 +96,6 @@ export default function EditarLancamentoForm({
     setErro("");
     setSalvando(true);
 
-    const hoje = new Date().toLocaleDateString("en-CA");
-
     try {
       const res = await fetch(`/api/lancamentos/${lancamento.id}`, {
         method: "PUT",
@@ -104,7 +106,7 @@ export default function EditarLancamentoForm({
           valor: Number(valor),
           vencimento,
           status,
-          pago_em: status === "pago" ? (lancamento.pago_em ?? hoje) : null,
+          pago_em: status === "pago" ? pagoEm : null,
           descricao: descricaoLimpa || null,
         }),
       });
@@ -233,6 +235,20 @@ export default function EditarLancamentoForm({
           <option value="pago">Pago</option>
         </select>
       </div>
+
+      {status === "pago" && (
+        <div>
+          <label className={rotulo}>Data do pagamento</label>
+          <input
+            type="date"
+            value={pagoEm}
+            max={formatarData(new Date())}
+            onChange={(e) => setPagoEm(e.target.value)}
+            className={campo}
+            required
+          />
+        </div>
+      )}
 
       {erro && <p className="text-sm text-danger">{erro}</p>}
 

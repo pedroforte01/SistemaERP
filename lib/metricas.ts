@@ -85,10 +85,10 @@ export async function getCrescimentoAlunosPeriodo(
   const result = await pool.query(
     `SELECT
        COUNT(*) FILTER (
-         WHERE created_at::date BETWEEN $1::date AND $2::date
+         WHERE data_matricula BETWEEN $1::date AND $2::date
        ) AS atual,
        COUNT(*) FILTER (
-         WHERE created_at::date BETWEEN $3::date AND $4::date
+         WHERE data_matricula BETWEEN $3::date AND $4::date
        ) AS anterior
      FROM alunos`,
     [atual.de, atual.ate, anterior.de, anterior.ate]

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { formatarData } from "@/lib/periodo";
 
 type Aluno = {
   id: number;
@@ -28,6 +29,7 @@ export default function NovoLancamentoPage() {
   const [valor, setValor] = useState("");
   const [vencimento, setVencimento] = useState("");
   const [status, setStatus] = useState("pendente");
+  const [pagoEm, setPagoEm] = useState(() => formatarData(new Date()));
   const [erro, setErro] = useState("");
   const [salvando, setSalvando] = useState(false);
 
@@ -95,6 +97,7 @@ export default function NovoLancamentoPage() {
           vencimento,
           status,
           descricao: descricaoLimpa || null,
+          pago_em: status === "pago" ? pagoEm : null,
         }),
       });
 
@@ -236,7 +239,21 @@ export default function NovoLancamentoPage() {
               <option value="pago">Pago</option>
             </select>
           </div>
-
+          
+          {status === "pago" && (
+            <div>
+              <label className={rotulo}>Data do pagamento</label>
+              <input
+                type="date"
+                value={pagoEm}
+                max={formatarData(new Date())}
+                onChange={(e) => setPagoEm(e.target.value)}
+                className={campo}
+                required
+              />
+            </div>
+          )}
+          
           {erro && <p className="text-sm text-danger">{erro}</p>}
 
           <button

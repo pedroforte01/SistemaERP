@@ -1,4 +1,5 @@
 import pool from "@/lib/db";
+import { formatarData } from "@/lib/periodo";
 
 export type Aluno = {
   id: number;
@@ -7,8 +8,15 @@ export type Aluno = {
   email: string;
   telefone: string;
   status: "ativo" | "inadimplente" | "inativo";
+  data_matricula: string;
   saldo_pendente: number;
 };
+
+// O banco devolve a data como objeto Date; a tela precisa do texto "2026-10-15".
+function dataTexto(valor: Date | string | null): string {
+  if (!valor) return "";
+  return valor instanceof Date ? formatarData(valor) : String(valor).slice(0, 10);
+}
 
 export async function getAlunos(): Promise<Aluno[]> {
   const result = await pool.query(`
@@ -25,11 +33,14 @@ export async function getAlunos(): Promise<Aluno[]> {
   `);
   return result.rows.map((row) => ({
     ...row,
+    data_matricula: dataTexto(row.data_matricula),
     saldo_pendente: Number(row.saldo_pendente),
   }));
 }
 
 export async function getAlunoById(id: string): Promise<Aluno | null> {
   const result = await pool.query("SELECT * FROM alunos WHERE id = $1", [id]);
-  return result.rows[0] ?? null;
+  const row = result.rows[0];
+  if (!row) return null;
+  return { ...row, data_matricula: dataTexto(row.data_matricula) };
 }

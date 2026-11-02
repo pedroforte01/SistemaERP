@@ -36,6 +36,7 @@ export default async function LancamentosPage() {
               <th className="py-2 pr-4">Tipo</th>
               <th className="py-2 pr-4">Valor</th>
               <th className="py-2 pr-4">Vencimento</th>
+              <th className="py-2 pr-4">Pago em</th>
               <th className="py-2 pr-4">Status</th>
               <th className="py-2 pr-4">Ações</th>
             </tr>
@@ -51,6 +52,9 @@ export default async function LancamentosPage() {
                 <td className="py-2 pr-4">R$ {l.valor.toFixed(2)}</td>
                 <td className="py-2 pr-4">
                   {l.vencimento ? new Date(l.vencimento + "T00:00:00").toLocaleDateString("pt-BR") : "—"}
+                </td>
+                <td className="py-2 pr-4">
+                  {l.pago_em ? new Date(l.pago_em + "T00:00:00").toLocaleDateString("pt-BR") : "—"}
                 </td>
                 <td className="py-2 pr-4">
                   {(() => {

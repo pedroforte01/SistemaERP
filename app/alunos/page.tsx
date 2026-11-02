@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getAlunos } from "./data";
 import AcoesAluno from "./AcoesAluno";
+import { dataBR } from "@/lib/periodo";
 
 export default async function AlunosPage() {
   const alunos = await getAlunos();
@@ -38,7 +39,7 @@ export default async function AlunosPage() {
         </Link>
       </header>
 
-      <main className="flex-1 px-8 py-8">
+      <div className="flex-1 px-8 py-8">
         <div className="flex gap-4 mb-8">
           <div className="border border-border rounded-lg px-5 py-4 bg-white min-w-[140px]">
             <p className="text-xs text-foreground/60 mb-1">Total</p>
@@ -66,6 +67,7 @@ export default async function AlunosPage() {
                 <th className="px-4 py-3 font-medium text-foreground/70">Documento</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Email</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Telefone</th>
+                <th className="px-4 py-3 font-medium text-foreground/70">Matrícula</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Status</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Ações</th>
               </tr>
@@ -77,6 +79,9 @@ export default async function AlunosPage() {
                   <td className="px-4 py-3 text-foreground/70">{aluno.documento}</td>
                   <td className="px-4 py-3 text-foreground/70">{aluno.email}</td>
                   <td className="px-4 py-3 text-foreground/70">{aluno.telefone}</td>
+                  <td className="px-4 py-3 text-foreground/70">
+                    {aluno.data_matricula ? dataBR(aluno.data_matricula) : "—"}
+                  </td>
                   <td className="px-4 py-3">
                     <span className={`text-xs font-medium px-2 py-1 rounded-full ${badgeStyle[aluno.status]}`}>
                       {badgeLabel[aluno.status]}
@@ -90,7 +95,7 @@ export default async function AlunosPage() {
             </tbody>
           </table>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
