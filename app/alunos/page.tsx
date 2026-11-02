@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAlunos } from "./data";
 import AcoesAluno from "./AcoesAluno";
 import { dataBR } from "@/lib/periodo";
+import AlternarMensal from "./AlternarMensal";
 
 export default async function AlunosPage() {
   const alunos = await getAlunos();
@@ -68,6 +69,7 @@ export default async function AlunosPage() {
                 <th className="px-4 py-3 font-medium text-foreground/70">Email</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Telefone</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Matrícula</th>
+                <th className="px-4 py-3 font-medium text-foreground/70">Cobrança mensal</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Status</th>
                 <th className="px-4 py-3 font-medium text-foreground/70">Ações</th>
               </tr>
@@ -82,6 +84,9 @@ export default async function AlunosPage() {
                   <td className="px-4 py-3 text-foreground/70">
                     {aluno.data_matricula ? dataBR(aluno.data_matricula) : "—"}
                   </td>
+                  <td className="px-4 py-3">
+                    <AlternarMensal id={aluno.id} ligado={aluno.cobranca_mensal} />
+                  </td>                  
                   <td className="px-4 py-3">
                     <span className={`text-xs font-medium px-2 py-1 rounded-full ${badgeStyle[aluno.status]}`}>
                       {badgeLabel[aluno.status]}

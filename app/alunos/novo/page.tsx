@@ -15,6 +15,7 @@ export default function NovoAlunoPage() {
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
   const [status, setStatus] = useState("ativo");
+  const [cobrancaMensal, setCobrancaMensal] = useState(true);
   const [dataMatricula, setDataMatricula] = useState(() => formatarData(new Date()));
   const [erro, setErro] = useState("");
   const [salvando, setSalvando] = useState(false);
@@ -35,6 +36,7 @@ export default function NovoAlunoPage() {
           telefone,
           status,
           data_matricula: dataMatricula,
+          cobranca_mensal: cobrancaMensal,
         }),
       });
 
@@ -103,6 +105,30 @@ export default function NovoAlunoPage() {
             </p>
           </div>
 
+          <div className="flex items-center justify-between gap-4 rounded-md border border-border bg-card p-4">
+            <div>
+              <p className="text-sm font-medium text-foreground">Cobrança mensal automática</p>
+              <p className="text-xs text-muted">
+                O sistema lança a mensalidade deste aluno todo mês, como Pendente.
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={cobrancaMensal}
+              onClick={() => setCobrancaMensal((atual) => !atual)}
+              className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${
+                cobrancaMensal ? "bg-accent" : "bg-border"
+              }`}
+            >
+              <span
+                className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  cobrancaMensal ? "translate-x-5" : ""
+                }`}
+              />
+            </button>
+          </div>
+          
           {erro && <p className="text-sm text-danger">{erro}</p>}
 
           <button

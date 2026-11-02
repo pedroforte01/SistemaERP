@@ -20,6 +20,7 @@ import {
   getCrescimentoAlunosPeriodo,
   getResumoFinanceiro,
 } from "@/lib/metricas";
+import { gerarRecorrencias } from "@/lib/recorrencias";
 
 const brl = (valor: number) =>
   valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -29,6 +30,7 @@ export default async function DashboardPage({
 }: {
   searchParams: Promise<{ de?: string; ate?: string }>;
 }) {
+  await gerarRecorrencias();
   const periodo = lerPeriodo(await searchParams);
   const anterior = periodoAnterior(periodo);
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
+import { gerarRecorrencias } from "@/lib/recorrencias";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +24,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  void gerarRecorrencias(); // ao abrir qualquer página, confere o que falta gerar
   return (
     <html
       lang="pt-BR"

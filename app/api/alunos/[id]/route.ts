@@ -43,3 +43,33 @@ export async function DELETE(
   await pool.query("DELETE FROM alunos WHERE id = $1", [id]);
   return NextResponse.json({ ok: true });
 }
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+    const { cobranca_mensal } = await request.json();
+
+    if (typeof cobranca_mensal !== "boolean") {
+      return NextResponse.json({ erro: "Valor inválido" }, { status: 400 });
+    }
+
+    const result = await pool.query(
+      "UPDATE alunos SET cobranca_mensal = $1 WHERE id = $2 RETURNING id, cobranca_mensal",
+      [cobranca_mensal, id]
+    );
+
+    if (!result.rows[0]) {
+      return NextResponse.json({ erro: "Aluno não encontrado" }, { status: 404 });
+    }
+    return NextResponse.json(result.rows[0]);
+  } catch (error) {
+    console.error("Erro ao alterar cobrança mensal:", error);
+    return NextResponse.json(
+      { erro: "Não foi possível alterar a cobrança mensal" },
+      { status: 500 }
+    );
+  }
+}

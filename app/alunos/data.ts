@@ -10,6 +10,7 @@ export type Aluno = {
   status: "ativo" | "inadimplente" | "inativo";
   data_matricula: string;
   saldo_pendente: number;
+  cobranca_mensal: boolean;
 };
 
 // O banco devolve a data como objeto Date; a tela precisa do texto "2026-10-15".

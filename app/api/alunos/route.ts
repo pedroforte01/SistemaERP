@@ -10,15 +10,17 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { nome, documento, email, telefone, status, data_matricula } =
+    const { nome, documento, email, telefone, status, data_matricula, cobranca_mensal } =
       await request.json();
     const matricula = DATA.test(data_matricula ?? "") ? data_matricula : null;
+    const mensal = typeof cobranca_mensal === "boolean" ? cobranca_mensal : null;
 
     const result = await pool.query(
-      `INSERT INTO alunos (nome, documento, email, telefone, status, data_matricula)
-       VALUES ($1, $2, $3, $4, $5, COALESCE($6::date, CURRENT_DATE))
+      `INSERT INTO alunos
+         (nome, documento, email, telefone, status, data_matricula, cobranca_mensal)
+       VALUES ($1, $2, $3, $4, $5, COALESCE($6::date, CURRENT_DATE), COALESCE($7::boolean, true))
        RETURNING *`,
-      [nome, documento, email, telefone, status ?? "ativo", matricula]
+      [nome, documento, email, telefone, status ?? "ativo", matricula, mensal]
     );
     return NextResponse.json(result.rows[0]);
   } catch (error) {

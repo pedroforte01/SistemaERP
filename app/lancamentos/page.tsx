@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { getLancamentos } from "./data";
 import AcoesLancamento from "./AcoesLancamento";
+import { gerarRecorrencias } from "@/lib/recorrencias";
 
 export default async function LancamentosPage() {
+  await gerarRecorrencias();
   const lancamentos = await getLancamentos();
 
   return (
